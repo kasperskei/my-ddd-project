@@ -1,15 +1,15 @@
 import {unref} from 'vue'
 import {emptyCart} from '@/modules/cart/domain'
-import {useCartStorage} from '@/modules/cart/storages'
+import {useCartStoreAdapter} from '@/modules/cart/services'
 
 /** Сценарий добавления, замены, удаления маркета из корзины. */
 export const useClearCart = () => {
-  const storage = useCartStorage()
+  const store = useCartStoreAdapter()
 
   const clearCart = (): void => {
-    const cart = emptyCart(unref(storage.cart))
+    const cart = emptyCart(unref(store.cart))
 
-    storage.updateCart(cart)
+    store.updateCart(cart)
   }
 
   return {

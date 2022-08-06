@@ -10,7 +10,7 @@ const useCartState = createGlobalState(
   () => useStorage<ComposeCart>('cart', createEmptyCart()),
 )
 
-export const useCartStorage = (): {
+export const useCartStore = (): {
   cart: Ref<ComposeCart>
   updateCart: (cart: ComposeCart) => void
 } => {

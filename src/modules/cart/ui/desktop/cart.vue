@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {reactify, toReactive} from '@vueuse/core'
-import {useCartStorage} from '@/modules/cart/storages'
+import {useCartStoreAdapter} from '@/modules/cart/services'
 import {
   useClearCart,
   useRemoveFromCart,
@@ -16,9 +16,8 @@ import type {CartMarket} from '@/modules/cart/domain'
 useSubscribeToUpdateCart()
 const {clearCart} = useClearCart()
 const {removeFromCart} = useRemoveFromCart()
-
-const storage = useCartStorage()
-const cart = toReactive(storage.cart)
+const store = useCartStoreAdapter()
+const cart = toReactive(store.cart)
 const types = reactify(getAvailableTypes)(cart)
 const systemValues = reactify(getAvailableSystemValues)(cart)
 const marketsCount = reactify(getMarketsCount)(cart)

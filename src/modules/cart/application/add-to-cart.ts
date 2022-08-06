@@ -5,14 +5,14 @@ import {
   insertOrReplaceMarket,
   removeMarket,
 } from '@/modules/cart/domain'
-import {useCartStorage} from '@/modules/cart/storages'
+import {useCartStoreAdapter} from '@/modules/cart/services'
 
 /** Сценарий добавления, замены, удаления маркета из корзины. */
 export const useAddToCart = () => {
-  const storage = useCartStorage()
+  const store = useCartStoreAdapter()
 
   const addToCart = (market: CartMarket): void => {
-    const cart = unref(storage.cart)
+    const cart = unref(store.cart)
 
     if (containsMarket(cart, market.id)) {
       removeMarket(cart, market.id)
@@ -20,7 +20,7 @@ export const useAddToCart = () => {
       insertOrReplaceMarket(cart, market)
     }
 
-    storage.updateCart(cart)
+    store.updateCart(cart)
   }
 
   return {

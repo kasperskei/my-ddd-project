@@ -195,4 +195,5 @@ export const containsMarket = (cart: ComposeCart, marketId: CartMarket['id']): b
 /** Содержит ли корзина маркет из игры. */
 export const containsGame = (cart: ComposeCart, gameId: CartMarket['gameId']): boolean => cart.markets.some((item) => item.gameId === gameId)
 
+/** Количество маркетов в корзине. */
 export const getMarketsCount = (cart: ComposeCart): number => cart.markets.length

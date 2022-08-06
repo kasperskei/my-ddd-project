@@ -1,16 +1,16 @@
 import {unref} from 'vue'
 import type {CartMarket} from '@/modules/cart/domain'
 import {removeMarket} from '@/modules/cart/domain'
-import {useCartStorage} from '@/modules/cart/storages'
+import {useCartStoreAdapter} from '@/modules/cart/services'
 
 /** Сценарий добавления, замены, удаления маркета из корзины. */
 export const useRemoveFromCart = () => {
-  const storage = useCartStorage()
+  const store = useCartStoreAdapter()
 
   const removeFromCart = (marketId: CartMarket['id']): void => {
-    const cart = removeMarket(unref(storage.cart), marketId)
+    const cart = removeMarket(unref(store.cart), marketId)
 
-    storage.updateCart(cart)
+    store.updateCart(cart)
   }
 
   return {

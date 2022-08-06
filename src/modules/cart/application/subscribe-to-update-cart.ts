@@ -3,8 +3,7 @@ import {
   unref,
   watch,
 } from 'vue'
-import {useCartStorage} from '@/modules/cart/storages'
-import {useCartApiAdapter} from '@/modules/cart/services'
+import {useCartApiAdapter, useCartStoreAdapter} from '@/modules/cart/services'
 
 /**
  * Обновляем коэффициент корзины и коэффициенты маркетов в корзине.
@@ -12,8 +11,8 @@ import {useCartApiAdapter} from '@/modules/cart/services'
  */
 export const useSubscribeToUpdateCart = () => {
   const api = useCartApiAdapter()
-  const storage = useCartStorage()
-  const {cart} = storage
+  const store = useCartStoreAdapter()
+  const {cart} = store
 
   const marketIds = computed(() => unref(cart).markets.map((market) => market.id))
   const typeId = computed(() => unref(cart).typeId)
@@ -28,6 +27,6 @@ export const useSubscribeToUpdateCart = () => {
   watch(trigger, async () => {
     const updatedCart = await api.updateCart(unref(cart))
 
-    storage.updateCart(updatedCart)
+    store.updateCart(updatedCart)
   }, {immediate: true})
 }
