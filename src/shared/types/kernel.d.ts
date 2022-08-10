@@ -31,6 +31,13 @@ type NonNullable<T> = T extends null | undefined ? never : T
 type ValueOf<T> = T[keyof T]
 
 type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void ? I : never
+type UnionToTuple<T> = UnionToIntersection<T extends never ? never : (t: T) => T> extends (_: never) => infer W
+  ? [...UnionToTuple<Exclude<T, W>>, W]
+  : []
+
+type Join<A extends unknown[], S extends string> = A extends [unknown, unknown, ...infer R]
+  ? Join<[`${A[0]}${S}${A[1]}`, ...R], S>
+  : A[0]
 
 type Mutable<T> = {
   -readonly [P in keyof T]: T[P]

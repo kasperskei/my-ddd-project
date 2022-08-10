@@ -1,8 +1,11 @@
-type SectionId = UInt
-type SportId = UInt
-type ChampId = UInt
-type GameId = UInt
-type GameShortId = UInt
+import type {
+  ChampId,
+  GameId,
+  GameShortId,
+  SectionId,
+  SectionSportId,
+  SportId,
+} from '@/shared/domain'
 
 export interface SportsMenu {
   activeChampIds: ChampId[]

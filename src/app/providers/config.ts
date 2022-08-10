@@ -2,13 +2,15 @@ import type {InjectionKey, Plugin} from 'vue'
 import {inject, reactive} from 'vue'
 import {CartType} from '@/modules/cart/domain'
 
+type AnyColor = string
+
 export interface AppConfig {
   api: {
     basePath: string
   }
   brand: {
     email: Email
-    logoSrc: string
+    logoSrc: FileNameWithExtension
     name: string
     partnerId: UInt
   }
@@ -17,7 +19,7 @@ export interface AppConfig {
     type: 'google' | 'none'
   }
   coupon: {
-    types: CouponType[]
+    types: CartType[]
   }
   geo: {
     countryId: UInt
@@ -27,7 +29,11 @@ export interface AppConfig {
     minAge: UInt
   }
   // ui: {
-
+  //   colors: {
+  //     primary: AnyColor
+  //     secondary: AnyColor
+  //     surface: AnyColor
+  //   }
   // }
 }
 
@@ -47,7 +53,7 @@ export const createConfig = (): Plugin => ({
       },
       brand: {
         email: 'partner@gmail.com',
-        logoSrc: '/',
+        logoSrc: '/logo.png',
         name: 'Partner',
         partnerId: 201,
       },

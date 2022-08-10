@@ -1,4 +1,4 @@
-import type {SuperMarket} from '@/shared/types/market'
+import type {SuperMarket} from '@/shared/domain'
 
 export const enum CartType {
   SINGLE = 0,

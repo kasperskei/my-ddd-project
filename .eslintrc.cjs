@@ -88,6 +88,7 @@ module.exports = {
             before: true,
           },
         ],
+        'vue/attribute-hyphenation': ['error', 'never'],
         'vue/block-lang': [
           'error',
           {
