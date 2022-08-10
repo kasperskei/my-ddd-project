@@ -70,6 +70,10 @@ module.exports = {
         parser: '@typescript-eslint/parser',
       },
       rules: {
+        /** Ругается на defineEmits. */
+        '@typescript-eslint/prefer-function-type': 'off',
+        /** Ругается на defineEmits. */
+        '@typescript-eslint/unified-signatures': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
         'no-undef': 'off',
         'no-unused-vars': 'off',
@@ -416,6 +420,9 @@ module.exports = {
           'error',
         ],
         'vue/v-for-delimiter-style': 'error',
+        'vue/v-on-event-hyphenation': ['error', 'never', {
+          autofix: true,
+        }],
         'vue/v-on-function-call': 'error',
       },
     },

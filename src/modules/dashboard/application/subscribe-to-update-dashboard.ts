@@ -4,7 +4,8 @@ import {
   unref,
   watch,
 } from 'vue'
-import {useSportsMenuApiAdapter, useSportsMenuStoreAdapter} from '@/modules/sports-menu/services'
+import {useDashboardApiAdapter, useDashboardStoreAdapter} from '@/modules/dashboard/services'
+import {toDashboardFiltersKey} from '@/modules/dashboard/domain'
 
 /**
  * Подписываемся на обновление меню спортов.
@@ -13,11 +14,10 @@ export const useSubscribeToUpdateDashboard = () => {
   const api = useDashboardApiAdapter()
   const store = useDashboardStoreAdapter()
 
-  const trigger = computed(() => toDashboardFiltersKey(filters))
+  const trigger = computed(() => toDashboardFiltersKey(store.settings))
+  watch(trigger, async (settings) => {
+    const updatedDashboardChamps = await api.loadDashboard(store.settings)
 
-  watch(() => toDashboardFiltersKey(filters), async () => {
-    const updatedDashboardChamps = await api.loadDashboard(filters)
-
-    dashboard.champs = updatedDashboardChamps
+    store.champs = updatedDashboardChamps
   }, {immediate: true})
 }

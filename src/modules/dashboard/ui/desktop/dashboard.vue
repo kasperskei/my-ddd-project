@@ -1,34 +1,86 @@
 <script lang="ts" setup>
 /** @todo Добавить поддержку long игр. */
-import {computed} from 'vue'
+import {
+  computed,
+  toRefs,
+  unref,
+} from 'vue'
 import {RouterLink, useRouter} from 'vue-router'
-import {useDashboardStoreAdapter} from '@/modules/dashboard/services/dashboard-store-adapter'
-import DashboardChamp from '@/modules/dashboard/ui/desktop/dashboard-champ.vue'
-import DashboardGameInfo from '@/modules/dashboard/ui/desktop/dashboard-game-info.vue'
-import DashboardGameMarkets from '@/modules/dashboard/ui/desktop/dashboard-game-markets.vue'
+import {useChangeDashboardSettings, useSubscribeToUpdateDashboard} from '@/modules/dashboard/application'
+import {useDashboardApiAdapter, useDashboardStoreAdapter} from '@/modules/dashboard/services'
+import type {
+  Champ,
+  Game,
+  Market,
+  SubGame,
+} from '@/modules/dashboard/domain'
+import {
+  getOtherChampsWithGames,
+  getPinnedChampsWithGames,
+  hasPinnedGame,
+} from '@/modules/dashboard/domain'
 import type {
   ChampId,
+  MarketId,
   SectionSportId,
-  SportId,
-} from '@/shared/domain/index'
+} from '@/shared/domain'
 
+import DashboardChampHead from '@/modules/dashboard/ui/desktop/dashboard-champ-head.vue'
+import DashboardGameInfo from '@/modules/dashboard/ui/desktop/dashboard-game-info.vue'
+import DashboardGameMarkets from '@/modules/dashboard/ui/desktop/dashboard-game-markets.vue'
+
+const emit = defineEmits<{
+  (event: 'selectMarket', payload: {
+    champ: Champ
+    game: Game | SubGame
+    market: Market
+  }): void
+}>()
 const props = defineProps<{
+  /** Id маркетов, которые необходимо выделить в Dashboard. */
+  selectedMarketIds: MarketId[]
   champIds: ChampId[]
   sectionSportIds: SectionSportId[]
 }>()
 
-const store = useDashboardStoreAdapter()
-const {
-  settings,
-  schemaBySportId,
-  champsBySportId,
-  gamesByChampId,
-  subGamesByGameId,
-  marketsByGameId,
-} = store
+useSubscribeToUpdateDashboard()
 
-const topChamps = computed(() => [...champsBySportId.values()].flat())
-const otherChamps = computed(() => [...champsBySportId.values()].flat())
+const {toggleSubGames, togglePinGame} = useChangeDashboardSettings()
+
+const store = useDashboardStoreAdapter()
+const {settings} = toRefs(store)
+
+const schema = {
+  groups: [
+    {
+      id: 1,
+      types: [
+        {
+          id: 1,
+          name: '1',
+        },
+        {
+          id: 2,
+          name: 'X',
+        },
+        {
+          id: 3,
+          name: '2',
+        },
+      ],
+    },
+  ],
+}
+
+/** Вынести логику в слой application */
+const pinnedChamps = computed(() => getPinnedChampsWithGames(store))
+const otherChamps = computed(() => getOtherChampsWithGames(store))
+const orderedChamps = computed(() => [...unref(pinnedChamps), ...unref(otherChamps)])
+const champs = computed(() => (hasPinnedGame(store.settings) ? unref(orderedChamps) : store.champs))
+
+const onSelectMarket = (champ: Champ, game: Game | SubGame, market: Market): void => emit('selectMarket', {champ, game, market})
+const onSelectPinGame = (game: Game): void => togglePinGame(game.id)
+const onSelectSubGame = (game: Game): void => toggleSubGames(game.id)
 </script>
 
 <template>
@@ -39,11 +91,14 @@ const otherChamps = computed(() => [...champsBySportId.values()].flat())
         :key="champ.id"
         class="dashboard-champ"
       >
-        <DashboardChamp :champ="champ" />
+        <DashboardChampHead
+          :champ="champ"
+          :schema="schema"
+        />
 
         <ul class="dashboard-games">
           <li
-            v-for="game in gamesByChampId.get(champ.id)"
+            v-for="game in champ.games"
             :key="game.id"
             class="dashboard-game"
           >
@@ -51,13 +106,19 @@ const otherChamps = computed(() => [...champsBySportId.values()].flat())
               <DashboardGameInfo
                 :champ="champ"
                 :game="game"
+                @selectPinGame="onSelectPinGame"
+                @selectSubGame="onSelectSubGame"
               />
               <DashboardGameMarkets
                 :marketGroups="game.marketGroups"
+                @selectMarket="onSelectMarket(champ, game, $event)"
               />
             </div>
 
-            <ul class="dashboard-sub-games">
+            <ul
+              v-if="settings.gameIds.includes(game.id) && game.subGames.length > 0"
+              class="dashboard-sub-games"
+            >
               <li
                 v-for="subGame in game.subGames"
                 :key="subGame.id"
@@ -68,6 +129,7 @@ const otherChamps = computed(() => [...champsBySportId.values()].flat())
                 </p>
                 <DashboardGameMarkets
                   :marketGroups="subGame.marketGroups"
+                  @selectMarket="onSelectMarket(champ, subGame, $event)"
                 />
               </li>
             </ul>
@@ -77,3 +139,11 @@ const otherChamps = computed(() => [...champsBySportId.values()].flat())
     </ul>
   </div>
 </template>
+
+<style lang="pcss" scoped>
+.dashboard-game-main,
+.dashboard-sub-game {
+  display: flex;
+  align-items: center;
+}
+</style>

@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-import type {Champ} from '@/modules/dashboard/domain/types'
+import type {Champ, DashboardSchema} from '@/modules/dashboard/domain'
 
-const marketGroups = defineProps<{
+const props = defineProps<{
   champ: Champ
+  schema: DashboardSchema
 }>()
 </script>
 
 <template>
-  <div>
+  <div class="dashboard-champ">
     <div>
       <span>{{ champ.sportId }}</span>
       <span>{{ champ.logotype }}</span>
@@ -16,7 +17,7 @@ const marketGroups = defineProps<{
     <div>
       <ul class="dashboard-champ-market-groups">
         <li
-          v-for="group in schemaBySportId.get(champ.sportId)!.groups"
+          v-for="group in schema.groups"
           :key="group.id"
           class="dashboard-champ-market-group"
         >
@@ -34,3 +35,15 @@ const marketGroups = defineProps<{
     </div>
   </div>
 </template>
+
+<style lang="pcss" scoped>
+.dashboard-champ,
+.dashboard-champ-market-groups,
+.dashboard-champ-market-types {
+  display: flex;
+  align-items: center;
+}
+.dashboard-champ-market-type {
+  padding: 0.5rem;
+}
+</style>

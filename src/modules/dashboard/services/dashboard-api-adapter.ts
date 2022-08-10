@@ -12,72 +12,59 @@ const responseMock: Champ[] = [
     name: 'Лига Чемпионов УЕФА',
     sportId: 1,
     logotype: 'icon.png',
-    sectionId: 1,
+    countryId: 1,
+    // gamesCount: 1,
+    // gamesCountWithVideo: 1,
+    // gamesCountWithZone: 1,
     games: [
       {
         id: 1,
+        shortId: 1,
         homeTeamName: 'Жальгирис',
         awayTeamName: 'Будё-Глимт',
         startedAt: new Date(),
         marketGroups: [
           {
-            id: 1,
+            groupId: 1,
             markets: [
               {
                 typeId: 1,
                 groupId: 1,
                 param: 0,
                 coef: 3.1,
+                isBlocked: false,
+                playerId: undefined,
               },
               {
                 typeId: 2,
                 groupId: 1,
                 param: 0,
                 coef: 1.2,
+                isBlocked: false,
+                playerId: undefined,
               },
               {
                 typeId: 3,
                 groupId: 1,
                 param: 0,
                 coef: 4.6,
+                isBlocked: false,
+                playerId: undefined,
               },
             ],
           },
         ],
+        subGames: [],
       },
     ],
   },
 ]
 
 export const useDashboardApiAdapter = () => {
-  const filters: DashboardSettings = {} as DashboardSettings
+  const defaultSettings: DashboardSettings = {} as DashboardSettings
 
-  const loadDashboard = async (f = filters): Promise<Champ[]> => {
+  const loadDashboard = async (settings = defaultSettings): Promise<Champ[]> => {
     await delay(random(100, 1000))
-
-    const champs: Champ[] = [
-      {
-        id: 1,
-        name: 'Лига Чемпионов УЕФА',
-        sportId: 1,
-        logotype: 'icon.png',
-        startedAt: new Date(),
-        countryId: 1,
-        countryName: 'CCCP',
-        gamesCount: 123,
-        gamesCountWithVideo: 12,
-        gamesCountWithZone: 23,
-      },
-    ]
-    const games: Game[] = [
-      {
-        awayTeamName: 'Жальгирис',
-        homeTeamName: 'Будё-Глимт',
-        id: 1,
-        shortId: 1,
-        startedAt: new Date(),
-      },
-    ]
 
     return structuredClone(responseMock)
   }
