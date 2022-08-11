@@ -18,16 +18,18 @@ const props = defineProps<{
       <ul class="dashboard-champ-market-groups">
         <li
           v-for="group in schema.groups"
-          :key="group.id"
+          :key="group.groupId"
           class="dashboard-champ-market-group"
         >
           <ul class="dashboard-champ-market-types">
-            <li
-              v-for="type in group.types"
-              :key="type.id"
-              class="dashboard-champ-market-type"
-            >
-              {{ type.name }}
+            <li class="dashboard-champ-market-type">
+              {{ group.types[0].name }}
+            </li>
+            <li class="dashboard-champ-market-type">
+              {{ group.types[1].name }}
+            </li>
+            <li class="dashboard-champ-market-type">
+              {{ group.types[2].name }}
             </li>
           </ul>
         </li>

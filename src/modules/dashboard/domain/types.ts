@@ -11,6 +11,7 @@ import type {
   SportId,
   SuperMarket,
 } from '@/shared/domain'
+import type {DictionaryKey} from '@/shared/services/i18n'
 
 export type GameMarketTypeId = `${GameId}-${MarketTypeId}`
 
@@ -29,16 +30,34 @@ export interface DashboardSettings {
   sectionSportIds: SectionSportId[]
   /** Id игр в топе. */
   pinnedGameIds: GameId[]
+  /** Порядок групп маркетов в дашборде для спорта. */
 }
 
+interface DashboardSchemaType {
+  name: DictionaryKey
+  typeId: MarketTypeId
+}
+interface DashboardSchemaParam {
+  name: DictionaryKey
+}
+interface DashboardSchemaGroupWithoutParam {
+  groupId: MarketGroupId.DOUBLE_CHANCE | MarketGroupId.VICTORY
+  types: [
+    DashboardSchemaType,
+    DashboardSchemaType,
+    DashboardSchemaType,
+  ]
+}
+interface DashboardSchemaGroupWithParam {
+  groupId: MarketGroupId.HANDICAP | MarketGroupId.INDIVIDUAL_TOTAL_1 | MarketGroupId.INDIVIDUAL_TOTAL_2 | MarketGroupId.TOTAL
+  types: [
+    DashboardSchemaType,
+    DashboardSchemaParam,
+    DashboardSchemaType,
+  ]
+}
 export interface DashboardSchema {
-  groups: {
-    id: MarketGroupId
-    types: {
-      id: MarketTypeId
-      name: string
-    }[]
-  }[]
+  groups: (DashboardSchemaGroupWithoutParam | DashboardSchemaGroupWithParam)[]
 }
 
 export interface Champ {

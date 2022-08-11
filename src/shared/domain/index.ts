@@ -1,16 +1,20 @@
+import type {SportId} from '@/shared/domain/sport'
+import type {MarketTypeId} from '@/shared/domain/market-type'
+
+export * from '@/shared/domain/sport'
+export * from '@/shared/domain/market-group'
+export * from '@/shared/domain/market-type'
+
 export type ChampId = UInt
 export type CountryId = UInt
 export type GameId = UInt
 export type GameShortId = UInt
-export type MarketGroupId = UInt
 export type MarketId = `${GameId}-${MarketTypeId}-${MarketParam | 0}-${PlayerId | 0}`
 export type MarketParam = number
-export type MarketTypeId = UInt
 export type TeamId = UInt
 export type PlayerId = TeamId | UInt
 export type SectionId = UInt
 export type SectionSportId = `${SectionId}-${SportId}`
-export type SportId = UInt
 
 export interface SuperMarket {
   champId: number

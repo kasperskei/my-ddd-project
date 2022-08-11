@@ -1,12 +1,4 @@
-/* eslint-disable no-param-reassign */
-import type {
-  ChampId,
-  GameId,
-  GameShortId,
-  SectionId,
-  SectionSportId,
-  SportId,
-} from '@/shared/domain'
+import type {GameId} from '@/shared/domain'
 import type {
   Champ,
   Dashboard,

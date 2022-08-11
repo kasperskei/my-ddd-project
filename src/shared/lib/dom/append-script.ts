@@ -1,17 +1,13 @@
 /**
- * Добавляет скрипт в тело документа
- * @todo Перенести в jsUtils/dom/appendScript
- * @param src
- * @param async Allows to load script file asynchronously by adding attribute `async` to the script element. It takes precedence if both `async` and `defer` are defined
- * @param defer Allows to load script file deferred
- * @param attributes
+ * Добавляет скрипт в тело документа.
  */
-export const appendScript = async (source: string, {
-  async = false,
-  defer = false,
-  attributes = {},
-} = {}): Promise<HTMLScriptElement> => {
-  const scriptExist = document.querySelector<HTMLScriptElement>(`script[src="${source}"]`)
+export const appendScript = async (attrs: {
+  [k: string]: string | true | undefined
+  src: string
+  async?: true
+  defer?: true
+}): Promise<HTMLScriptElement> => {
+  const scriptExist = document.querySelector<HTMLScriptElement>(`script[src="${attrs.src}"]`)
 
   if (scriptExist) {
     return scriptExist
@@ -19,11 +15,9 @@ export const appendScript = async (source: string, {
 
   const script = document.createElement('script')
 
-  Object.entries<string>(attributes).forEach(([key, value]) => script.setAttribute(key, value))
-
-  script.async = async
-  script.defer = defer
-  script.src = source
+  Object.entries(attrs)
+    .filter(([key, value]) => value !== undefined)
+    .forEach(([key, value]) => script.setAttribute(key, value === true ? '' : value!))
 
   document.head.append(script)
 

@@ -6,16 +6,16 @@ import type {
 } from 'vue'
 import {template} from '@/shared/lib/string/template'
 
-type Locale = string
-type DictionaryKey = string
-type DictionaryTemplate = string
-type Dictionary = Map<DictionaryKey, DictionaryTemplate>
+export type Locale = string
+export type DictionaryKey = string
+export type DictionaryTemplate = string
+export type Dictionary = Map<DictionaryKey, DictionaryTemplate>
 
-type D = (date: Date, options: Intl.DateTimeFormatOptions) => string
-type N = (number: number, options: Intl.NumberFormatOptions) => string
-type T = (key: DictionaryKey, params?: Record<string, string> | undefined) => string
+export type D = (date: Date, options: Intl.DateTimeFormatOptions) => string
+export type N = (number: number, options: Intl.NumberFormatOptions) => string
+export type T = (key: DictionaryKey, params?: Record<string, string> | undefined) => string
 
-interface I18n {
+export interface I18n {
   d: D
   dictionary: Ref<Dictionary>
   locale: Ref<Locale>

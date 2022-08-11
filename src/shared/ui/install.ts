@@ -13,4 +13,4 @@ export const createUi = (config: UiConfig): Plugin => ({
   },
 })
 
-export const useConfig = (): Readonly<UiConfig> => inject(UI_CONFIG_PROVIDE_KEY)!
+export const useUiConfig = (): Readonly<UiConfig> => inject(UI_CONFIG_PROVIDE_KEY)!

@@ -15,6 +15,7 @@ import type {
   SubGame,
 } from '@/modules/dashboard/domain'
 import {
+  DASHBOARD_MATCH_SCHEMA,
   getOtherChampsWithGames,
   getPinnedChampsWithGames,
   hasPinnedGame,
@@ -50,33 +51,14 @@ const {toggleSubGames, togglePinGame} = useChangeDashboardSettings()
 const store = useDashboardStoreAdapter()
 const {settings} = toRefs(store)
 
-const schema = {
-  groups: [
-    {
-      id: 1,
-      types: [
-        {
-          id: 1,
-          name: '1',
-        },
-        {
-          id: 2,
-          name: 'X',
-        },
-        {
-          id: 3,
-          name: '2',
-        },
-      ],
-    },
-  ],
-}
+const schema = DASHBOARD_MATCH_SCHEMA
 
 /** Вынести логику в слой application */
-const pinnedChamps = computed(() => getPinnedChampsWithGames(store))
-const otherChamps = computed(() => getOtherChampsWithGames(store))
+const hasPinnedGames = computed(() => hasPinnedGame(store.settings))
+const pinnedChamps = computed(() => (unref(hasPinnedGames) ? getPinnedChampsWithGames(store) : []))
+const otherChamps = computed(() => (unref(hasPinnedGames) ? getOtherChampsWithGames(store) : store.champs))
 const orderedChamps = computed(() => [...unref(pinnedChamps), ...unref(otherChamps)])
-const champs = computed(() => (hasPinnedGame(store.settings) ? unref(orderedChamps) : store.champs))
+// const champs = computed(() => (hasPinnedGame(store.settings) ? unref(orderedChamps) : store.champs))
 
 const onSelectMarket = (champ: Champ, game: Game | SubGame, market: Market): void => emit('selectMarket', {champ, game, market})
 const onSelectPinGame = (game: Game): void => togglePinGame(game.id)
@@ -85,9 +67,10 @@ const onSelectSubGame = (game: Game): void => toggleSubGames(game.id)
 
 <template>
   <div class="dashboard">
+    <!-- @todo Вынести в отдельный компонент. -->
     <ul class="dashboard-champs">
       <li
-        v-for="champ in champs"
+        v-for="champ in orderedChamps"
         :key="champ.id"
         class="dashboard-champ"
       >
