@@ -5,6 +5,7 @@ import {withI18n} from '@/app/providers/i18n'
 import {withLogger} from '@/app/providers/logger'
 import {withRouter} from '@/app/providers/router'
 import {withStore} from '@/app/providers/store'
+import {withViewport} from '@/app/providers/viewport'
 
 import '@/app/providers/polyfill'
 import '@/app/styles/index.pcss'
@@ -28,5 +29,6 @@ app.use(withHttp())
 app.use(withI18n())
 app.use(withRouter())
 app.use(withStore())
+app.use(withViewport())
 
 app.mount('#app')
