@@ -197,9 +197,11 @@ module.exports = {
           'never',
         ],
         'vue/html-button-has-type': 'error',
-        'vue/html-comment-content-newline': 'error',
+        /** Неправильно форматирует закомментированный код в template. */
+        'vue/html-comment-content-newline': 'off',
         'vue/html-comment-content-spacing': 'error',
-        'vue/html-comment-indent': 'error',
+        /** Неправильно форматирует закомментированный код в template. */
+        'vue/html-comment-indent': 'off',
         'vue/key-spacing': [
           'error',
           {

@@ -13,6 +13,7 @@ import type {
 } from '@/shared/domain'
 import type {DictionaryKey} from '@/shared/services/i18n'
 
+export type DashboardGroupParam = `-${number}+` | `+${number}-` | `${number}`
 export type GameMarketTypeId = `${GameId}-${MarketTypeId}`
 
 export interface Dashboard {
@@ -31,6 +32,7 @@ export interface DashboardSettings {
   /** Id игр в топе. */
   pinnedGameIds: GameId[]
   /** Порядок групп маркетов в дашборде для спорта. */
+  marketGroupsOrderBySportId: Map<SportId, MarketGroupId[]>
 }
 
 interface DashboardSchemaType {
@@ -89,7 +91,9 @@ interface BaseGame {
   shortId: GameShortId
   startedAt: Date
   subGames: SubGame[]
-  marketGroups: MarketsGroup[]
+  // marketGroups: MarketsGroup[]
+  // marketGroups: Partial<Record<MarketGroupId, MarketsGroup>>
+  markets: Market[]
 }
 
 export type MatchGame = BaseGame & {
@@ -107,21 +111,26 @@ export interface SubGame {
   id: GameId
   mainGameId: GameId
   name: string
-  marketGroups: MarketsGroup[]
+  // marketGroups: MarketsGroup[]
+  markets: Market[]
 }
 
 export type Game = LongGame | MatchGame
 
 export interface MarketsGroup {
   groupId: MarketGroupId
+  marketTypes: Partial<Record<MarketTypeId, Market[]>>
   markets: Market[]
+  param: string | undefined
 }
 
 export interface Market {
   coef: number
   groupId: MarketGroupId
+  groupParam: DashboardGroupParam
   isBlocked: boolean
-  param: number
+  /** @todo undefined или 0 в случае отсутствия значения? */
+  param: number | undefined
   playerId: PlayerId | undefined
   typeId: MarketTypeId
 }

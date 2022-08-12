@@ -25,9 +25,3 @@ export interface MarketGroupRaw {
   C: number
 }
 export type MarketGroupsRaw = Record<MarketGroupId, MarketGroupRaw>
-
-export const getMarketName = (): string => ''
-
-export const getMarketName = (): string => ''
-
-export const getMarketName = (): string => ''

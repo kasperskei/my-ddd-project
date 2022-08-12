@@ -93,7 +93,8 @@ const onSelectSubGame = (game: Game): void => toggleSubGames(game.id)
                 @selectSubGame="onSelectSubGame"
               />
               <DashboardGameMarkets
-                :marketGroups="game.marketGroups"
+                :schema="schema"
+                :markets="game.markets"
                 @selectMarket="onSelectMarket(champ, game, $event)"
               />
             </div>
@@ -111,7 +112,8 @@ const onSelectSubGame = (game: Game): void => toggleSubGames(game.id)
                   {{ subGame.name }}
                 </p>
                 <DashboardGameMarkets
-                  :marketGroups="subGame.marketGroups"
+                  :schema="schema"
+                  :markets="subGame.markets"
                   @selectMarket="onSelectMarket(champ, subGame, $event)"
                 />
               </li>

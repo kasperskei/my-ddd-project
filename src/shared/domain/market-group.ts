@@ -53,7 +53,8 @@ export const enum MarketGroupId {
   OVER_INDIVIDUAL_RUNS_TOTAL_2_EVEN_ODD = 10_697,
 }
 
-export const TRIPLE_MARKET_GROUP_IDS = [
+/** Группы маркетов содержащих в себе 3 маркета. */
+export const GROUP_IDS_WITH_TRIPLE_MARKET = [
   MarketGroupId.VICTORY,
   MarketGroupId.DOUBLE_CHANCE,
   MarketGroupId.VICTORY_IN_MATCH,
